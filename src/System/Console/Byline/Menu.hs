@@ -23,6 +23,7 @@ module System.Console.Byline.Menu
        , suffix
        , matcher
        , beforePrompt
+       , defaultFirst
        , askWithMenu
        , askWithMenuRepeatedly
        ) where
@@ -59,6 +60,7 @@ data Menu a = Menu
   , menuItemPrefix   :: Int -> Stylized  -- ^ Stylize an item's index.
   , menuItemSuffix   :: Stylized         -- ^ Printed after an item's index.
   , menuBeforePrompt :: Maybe Stylized   -- ^ Printed before the prompt.
+  , menuDefaultFirst :: Bool             -- ^ Toggle defaulting to first item.
   , menuMatcher      :: Matcher a        -- ^ Matcher function.
   }
 
@@ -145,6 +147,7 @@ menu items displayF =
        , menuItemPrefix   = numbered
        , menuItemSuffix   = text ") "
        , menuBeforePrompt = Nothing
+       , menuDefaultFirst = True
        , menuMatcher      = defaultMatcher
        }
 
@@ -183,6 +186,11 @@ beforePrompt :: Stylized -> Menu a -> Menu a
 beforePrompt s m = m {menuBeforePrompt = Just s}
 
 --------------------------------------------------------------------------------
+-- | Toggle defaulting to first item in menu selection
+defaultFirst :: Bool -> Menu a -> Menu a
+defaultFirst b m = m {menuDefaultFirst = b}
+
+--------------------------------------------------------------------------------
 -- | Ask the user to choose an item from a menu.  The menu will only
 -- be shown once and the user's choice will be returned in a 'Choice'
 -- value.
@@ -205,11 +213,14 @@ askWithMenu m prompt = do
     -- completion function is already active.
     go comp = withCompletionFunc (fromMaybe (defaultCompFunc m) comp) $ do
       prefixes <- displayMenu
-      answer   <- ask prompt (Just firstItem)
+      answer   <- ask prompt firstItem
       return (menuMatcher m m prefixes answer)
 
     -- The default menu item.
-    firstItem = Text.strip $ renderText Plain (menuItemPrefix m 1)
+    firstItem =
+      if menuDefaultFirst m
+         then Just $ Text.strip $ renderText Plain (menuItemPrefix m 1)
+         else Nothing
 
     -- Print the entire menu.
     displayMenu = do

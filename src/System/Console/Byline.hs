@@ -97,6 +97,7 @@ module System.Console.Byline
        , prefix
        , suffix
        , beforePrompt
+       , defaultFirst
        , Matcher
        , matcher
 
