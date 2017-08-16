@@ -22,6 +22,7 @@ module System.Console.Byline.Menu
        , prefix
        , suffix
        , matcher
+       , beforePrompt
        , askWithMenu
        , askWithMenuRepeatedly
        ) where
@@ -174,6 +175,12 @@ suffix s m = m {menuItemSuffix = s}
 -- prefix values and return a 'Choice'.
 matcher :: Matcher a -> Menu a -> Menu a
 matcher f m = m {menuMatcher = f}
+
+--------------------------------------------------------------------------------
+-- | Change the before prompt text. It is displayed after the menu
+-- and before the prompt, and is useful for error messages.
+beforePrompt :: Stylized -> Menu a -> Menu a
+beforePrompt s m = m {menuBeforePrompt = Just s}
 
 --------------------------------------------------------------------------------
 -- | Ask the user to choose an item from a menu.  The menu will only

@@ -96,6 +96,7 @@ module System.Console.Byline
        , banner
        , prefix
        , suffix
+       , beforePrompt
        , Matcher
        , matcher
 
