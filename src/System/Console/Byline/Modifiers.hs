@@ -21,10 +21,6 @@ module System.Console.Byline.Modifiers
        ) where
 
 --------------------------------------------------------------------------------
--- Library imports:
-import Data.Monoid
-
---------------------------------------------------------------------------------
 -- Byline imports:
 import System.Console.Byline.Internal.Color
 import System.Console.Byline.Internal.Types

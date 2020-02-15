@@ -1,4 +1,4 @@
-resolver: lts-9.14
+resolver: lts-14.23
 
 flags:
   byline:
@@ -14,3 +14,4 @@ nix:
 
 extra-deps:
   - terminfo-hs-0.2.1
+  - ansi-terminal-0.8.2
